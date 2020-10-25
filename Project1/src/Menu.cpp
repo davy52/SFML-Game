@@ -22,9 +22,14 @@ void Menu::initFont()
 void Menu::initVariables()
 {
 	this->menuPause = new sf::Text[3];
-	this->menuPause->setString("Resume");
-	this->menuPause->setString("Settings");
-	this->menuPause->setString("Exit");
+	std::string arr[3] = { "Resume", "Settings", "Exit" };
+	for (int i = 0; i < 3; i++) {
+		this->menuPause[i].setFont(*this->font1);
+		this->menuPause[i].setCharacterSize(30);
+		this->menuPause[i].setOrigin(this->menuPause->getLocalBounds().width / 2.f, this->menuPause->getLocalBounds().height / 2.f); //zmina punktu okreslajacego polozenie obiektu (tekstu) na jego srodek
+		this->menuPause[i].setFillColor(sf::Color::Black);
+		this->menuPause[i].setString(arr[i]);
+	}
 }
 
 //Constructor/Deconstructor
@@ -40,4 +45,22 @@ Menu::~Menu()
 	delete this->body;
 	delete this->font1;
 	delete this->menuPause;
+}
+
+sf::RectangleShape* Menu::getBody() const
+{
+	return this->body;
+}
+
+sf::Text* Menu::getMenuPause() const
+{
+	return this->menuPause;
+}
+
+//Methods
+void Menu::setTextPosition(sf::Vector2f pos)
+{
+	for (int i = 0; i < 3; i++) {
+		this->menuPause[i].setPosition(sf::Vector2f(pos.x, pos.y + i * 30));
+	}
 }

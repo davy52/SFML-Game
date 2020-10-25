@@ -8,6 +8,7 @@
 #include <string>
 
 #include "Entity.h"
+#include "Menu.h"
 
 class Game
 {
@@ -16,8 +17,12 @@ private:
 
 	//Window
 	sf::RenderWindow* window;
+	sf::Vector2u window_size;
 	sf::Event event;
 	sf::VideoMode videomode;
+
+	//Menu
+	Menu* menu;
 
 	//Entities
 	Entity* player;
@@ -41,6 +46,7 @@ private:
 	void initWindow();
 	void initClock();
 	void initPlayer();
+	void initMenu();
 
 	//PrivateFunctions
 	void updateKeys();
@@ -62,6 +68,9 @@ public:
 	void pollEvents();
 	void update();
 	void render();
+
+	void renderPlayer(sf::RenderTarget& target);
+	void renderMenu(sf::RenderTarget& target);
 
 	
 

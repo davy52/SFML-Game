@@ -31,6 +31,12 @@ public:
 	Menu(sf::Vector2f size, sf::Vector2f pos, sf::Color color = sf::Color::Blue, float outlineThickness = 2.f, sf::Color outlineColor = sf::Color::Black);
 	~Menu();
 
+	//Accessors
+	sf::RectangleShape* getBody() const;
+	sf::Text* getMenuPause() const;
+	//Methods
+	void setTextPosition(sf::Vector2f pos);
+
 
 };
 

@@ -9,6 +9,7 @@ void Game::initVariables()
 	this->videomode.width = 800;
 	this->videomode.height = 600;
 	this->keys = { false, false, false, false };
+	this->window_size = sf::Vector2u(800, 600);
 
 }
 
@@ -28,6 +29,13 @@ void Game::initPlayer()
 {
 	this->player = new Entity;
 	this->player->setPos(sf::Vector2f(400.f, 300.f));
+}
+
+void Game::initMenu()
+{
+	this->menu = new Menu(sf::Vector2f(400.f, 100.f), sf::Vector2f(200.f, 250.f));
+	this->menu->setTextPosition(sf::Vector2f(400.f, 20.f));
+
 }
 
 //PrivateFunctions
@@ -155,12 +163,25 @@ void Game::render()
 	if (this->getFpsTime() > 100.f / this->MAX_FRAMERATE) {
 		this->window->clear(sf::Color::Green); //clear old frame with green (green background if nothing drawn)
 		//draw game
-		this->window->draw(this->player->getBody());
-
+		this->renderPlayer(*this->window);
+		this->renderMenu(*this->window);
 		//display game
 		this->window->display(); //render new frame
 
 		this->updateFpsTime();
+	}
+}
+
+void Game::renderPlayer(sf::RenderTarget& target)
+{
+	target.draw(this->player->getBody());
+}
+
+void Game::renderMenu(sf::RenderTarget& target)
+{
+	target.draw(*this->menu->getBody());
+	for (int i = 0; i < 3; i++) {
+		target.draw(*this->menu->getMenuPause());
 	}
 }
 
