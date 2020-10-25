@@ -6,7 +6,7 @@
 int main(void)
 {
     Game game;
-
+    game.setMaxFramerate(30);
 
 
 
@@ -14,14 +14,10 @@ int main(void)
     while (game.isRunning()){
        
 
-
         //UPDATE
         game.update();
         //RENDER
-        if (game.getFpsTime() > 32) {
-            game.render();
-            game.updateFpsTime();
-        }
+        game.render();
     }
 
     return 0;

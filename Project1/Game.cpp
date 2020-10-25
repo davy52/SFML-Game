@@ -3,6 +3,8 @@
 //Inits
 void Game::initVariables()
 {
+	this->MAX_FRAMERATE = 60;
+
 	this->window = nullptr;
 	this->videomode.width = 800;
 	this->videomode.height = 600;
@@ -77,6 +79,15 @@ int Game::getFpsTime()
 
 
 //Methods
+void Game::setMaxFramerate(uint16_t frames) 
+{
+	/*
+	tak wiem ze jest metoda sf::Window::setFramerateLimit() ale w tymwypadku biblioteka urzywa sf::sleep
+	czego nie chce robic poniewaz na chwile obecna wszystko dziala w jednym watku
+	*/
+	this->MAX_FRAMERATE = frames;
+}
+
 void Game::updateFpsTime()
 {
 	this->fps_time1 = this->fps_time2;
@@ -132,8 +143,8 @@ void Game::update()
 	//
 	////print pos of mouse on window
 	//std::cout << "\trel to window: " << sf::Mouse::getPosition(*this->window).x << "\t" << sf::Mouse::getPosition(*this->window).y << std::endl;
-	this->engine_time2 = this->clock->getElapsedTime();
-	std::cout << this->engine_time2.asSeconds() << std::endl;
+	//this->engine_time2 = this->clock->getElapsedTime();
+	//std::cout << this->engine_time2.asSeconds() << std::endl;
 }
 
 void Game::render()
@@ -141,12 +152,15 @@ void Game::render()
 	/*
 		Renders game
 	*/
+	if (this->getFpsTime() > 100.f / this->MAX_FRAMERATE) {
+		this->window->clear(sf::Color::Green); //clear old frame with green (green background if nothing drawn)
+		//draw game
+		this->window->draw(this->player->getBody());
 
-	this->window->clear(sf::Color::Green); //clear old frame with green (green background if nothing drawn)
-	//draw game
-	this->window->draw(this->player->getBody());
+		//display game
+		this->window->display(); //render new frame
 
-	//display game
-	this->window->display(); //render new frame
+		this->updateFpsTime();
+	}
 }
 

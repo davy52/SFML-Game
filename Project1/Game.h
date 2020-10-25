@@ -12,6 +12,8 @@
 class Game
 {
 private:
+	int MAX_FRAMERATE;
+
 	//Window
 	sf::RenderWindow* window;
 	sf::Event event;
@@ -42,6 +44,10 @@ private:
 
 	//PrivateFunctions
 	void updateKeys();
+	int getFpsTime();
+	void updateFpsTime();
+
+
 public:
 	//Constructor/Deconstructor
 	Game();
@@ -49,13 +55,15 @@ public:
 
 	//Accessors
 	bool isRunning() const;
-	int getFpsTime();
 
 	//Methods
-	void updateFpsTime();
+	void setMaxFramerate(uint16_t frames);
+
 	void pollEvents();
 	void update();
 	void render();
+
+	
 
 
 };
