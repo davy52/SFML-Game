@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 
+
 #include "Entity.h"
 #include "Menu.h"
 
@@ -71,6 +72,8 @@ public:
 
 	void renderPlayer(sf::RenderTarget& target);
 	void renderMenu(sf::RenderTarget& target);
+
+
 
 	
 

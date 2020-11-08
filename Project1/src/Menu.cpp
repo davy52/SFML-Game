@@ -1,14 +1,14 @@
 #include "Menu.h"
 
 //Inits
-void Menu::initBody(sf::Vector2f size, sf::Vector2f pos, sf::Color color, float outlineThickness, sf::Color outlineColor)
+void Menu::initBody()
 {
 	this->body = new sf::RectangleShape();
-	this->body->setSize(size);
-	this->body->setPosition(pos);
-	this->body->setFillColor(color);
-	this->body->setOutlineThickness(outlineThickness);
-	this->body->setOutlineColor(outlineColor);
+	this->body->setSize(sf::Vector2f(400.f, 100.f));
+	this->body->setPosition(200.f, 250.f);
+	this->body->setFillColor(sf::Color::Blue);
+	this->body->setOutlineThickness(2.f);
+	this->body->setOutlineColor(sf::Color::Black);
 }
 
 void Menu::initFont()
@@ -21,21 +21,37 @@ void Menu::initFont()
 
 void Menu::initVariables()
 {
+	//this->menuPause = new sf::Text;
+	//this->menuPause->setFont(*this->font1);
+	//this->menuPause->setCharacterSize(30);
+	//this->menuPause->setString("Test");
+	//this->menuPause->setFillColor(sf::Color::Black);
+	//this->menuPause->setPosition(400.f, 300.f);
 	this->menuPause = new sf::Text[3];
+	//this->menuPause = new std::vector<sf::Text>;
 	std::string arr[3] = { "Resume", "Settings", "Exit" };
 	for (int i = 0; i < 3; i++) {
+		//sf::Text temp;
+		//temp.setFont(*this->font1);
+		//temp.setCharacterSize(30);
+		//temp.setOrigin(temp.getLocalBounds().width / 2.f, temp.getLocalBounds().height / 2.f); //zmina punktu okreslajacego polozenie obiektu (tekstu) na jego srodek
+		//temp.setFillColor(sf::Color::Black);
+		//temp.setString(arr[i]);
+		//temp.setPosition(400.f, 300.f + 50 * i);
+		//this->menuPause->push_back(temp);
 		this->menuPause[i].setFont(*this->font1);
 		this->menuPause[i].setCharacterSize(30);
 		this->menuPause[i].setOrigin(this->menuPause->getLocalBounds().width / 2.f, this->menuPause->getLocalBounds().height / 2.f); //zmina punktu okreslajacego polozenie obiektu (tekstu) na jego srodek
 		this->menuPause[i].setFillColor(sf::Color::Black);
 		this->menuPause[i].setString(arr[i]);
+		this->menuPause[i].setPosition(400.f, 300.f + 50 * i);
 	}
 }
 
 //Constructor/Deconstructor
-Menu::Menu(sf::Vector2f size, sf::Vector2f pos, sf::Color color, float outlineThickness, sf::Color outlineColor)
+Menu::Menu()
 {
-	this->initBody(size, pos, color, outlineThickness, outlineColor);
+	this->initBody();
 	this->initFont();
 	this->initVariables();
 }
@@ -47,9 +63,9 @@ Menu::~Menu()
 	delete this->menuPause;
 }
 
-sf::RectangleShape* Menu::getBody() const
+sf::RectangleShape Menu::getBody() const
 {
-	return this->body;
+	return *this->body;
 }
 
 sf::Text* Menu::getMenuPause() const

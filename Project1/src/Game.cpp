@@ -27,13 +27,13 @@ void Game::initClock()
 
 void Game::initPlayer()
 {
-	this->player = new Entity;
-	this->player->setPos(sf::Vector2f(400.f, 300.f));
+	this->player = new Player(sf::Vector2f(100.f, 100.f));
+	this->player->setPosition(sf::Vector2f(400.f, 300.f));
 }
 
 void Game::initMenu()
 {
-	this->menu = new Menu(sf::Vector2f(400.f, 100.f), sf::Vector2f(200.f, 250.f));
+	this->menu = new Menu();
 	this->menu->setTextPosition(sf::Vector2f(400.f, 20.f));
 
 }
@@ -65,12 +65,14 @@ Game::Game()
 	this->initClock();
 	this->initPlayer();
 	this->initPlayer();
+	this->initMenu();
 }
 
 Game::~Game()
 {
 	delete this->window;
 	delete this->clock;
+	delete this->menu;
 	delete this->player;
 }
 	
@@ -174,14 +176,14 @@ void Game::render()
 
 void Game::renderPlayer(sf::RenderTarget& target)
 {
-	target.draw(this->player->getBody());
+	target.draw(*this->player);
 }
 
 void Game::renderMenu(sf::RenderTarget& target)
 {
-	target.draw(*this->menu->getBody());
+	target.draw(this->menu->getBody());
 	for (int i = 0; i < 3; i++) {
-		target.draw(*this->menu->getMenuPause());
+		target.draw(this->menu->getMenuPause()[i]);
 	}
 }
 
