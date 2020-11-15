@@ -13,11 +13,12 @@ class Menu
 private:
 	sf::RectangleShape* body;
 
-	sf::Text* menuPause;
-	enum choicePause
+	std::vector<sf::Text>* menuText;
+	enum options
 	{
-		RESUME, SETTINGS, EXIT
+		RESUME = 0, SETTINGS = 1, EXIT = 2
 	};
+	options selected;
 
 	//Recources
 	sf::Font* font1;
@@ -33,9 +34,12 @@ public:
 
 	//Accessors
 	sf::RectangleShape getBody() const;
-	sf::Text* getMenuPause() const;
+	std::vector<sf::Text>* getMenuText() const;
+	int getSelection() const;
 	//Methods
 	void setTextPosition(sf::Vector2f pos);
+	void setSelection(bool up);
+
 
 
 };

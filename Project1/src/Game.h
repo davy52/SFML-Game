@@ -15,7 +15,8 @@ class Game
 {
 private:
 	int MAX_FRAMERATE;
-
+	sf::Texture tex_alf;
+	sf::Sprite spr_alf;
 	//Window
 	sf::RenderWindow* window;
 	sf::Vector2u window_size;
@@ -24,6 +25,7 @@ private:
 
 	//Menu
 	Menu* menu;
+	bool bMenuActive = false;
 
 	//Entities
 	Entity* player;
@@ -43,6 +45,7 @@ private:
 	sf::Time engine_time1, engine_time2; // do ograniczania predkosci wykonywania obliczen np. jak czesto sprawdzac 
 
 	//Inits
+	void initAlf();
 	void initVariables();
 	void initWindow();
 	void initClock();
@@ -65,6 +68,7 @@ public:
 
 	//Methods
 	void setMaxFramerate(uint16_t frames);
+	void menuPause();
 
 	void pollEvents();
 	void update();
@@ -73,7 +77,9 @@ public:
 	void renderPlayer(sf::RenderTarget& target);
 	void renderMenu(sf::RenderTarget& target);
 
+	void renderAlf(sf::RenderTarget& target);
 
+	void enter();
 
 	
 

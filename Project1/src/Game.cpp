@@ -1,6 +1,16 @@
 #include "Game.h"
 
 //Inits
+void Game::initAlf()
+{
+	if (!this->tex_alf.loadFromFile("Resources/Background/temporary-alf.png")) {
+		std::cout << "Alfa nie ma" << std::endl;
+	}
+	this->spr_alf.setPosition(0, 0);
+	this->spr_alf.setTexture(this->tex_alf);
+	this->spr_alf.setScale(0.5, 0.5);
+}
+
 void Game::initVariables()
 {
 	this->MAX_FRAMERATE = 60;
@@ -34,7 +44,7 @@ void Game::initPlayer()
 void Game::initMenu()
 {
 	this->menu = new Menu();
-	this->menu->setTextPosition(sf::Vector2f(400.f, 20.f));
+	//this->menu->setTextPosition(sf::Vector2f(400.f, 20.f));
 
 }
 
@@ -60,19 +70,20 @@ void Game::updateKeys()
 //Constructor/Deconstructor
 Game::Game()
 {
+	this->initAlf();
 	this->initVariables();
 	this->initWindow();
 	this->initClock();
 	this->initPlayer();
 	this->initPlayer();
-	this->initMenu();
+	//this->initMenu();
 }
 
 Game::~Game()
 {
 	delete this->window;
 	delete this->clock;
-	delete this->menu;
+	//delete this->menu;
 	delete this->player;
 }
 	
@@ -91,11 +102,54 @@ int Game::getFpsTime()
 //Methods
 void Game::setMaxFramerate(uint16_t frames) 
 {
-	/*
-	tak wiem ze jest metoda sf::Window::setFramerateLimit() ale w tymwypadku biblioteka urzywa sf::sleep
-	czego nie chce robic poniewaz na chwile obecna wszystko dziala w jednym watku
-	*/
 	this->MAX_FRAMERATE = frames;
+}
+
+void Game::menuPause()
+{
+	this->initMenu();
+	this->bMenuActive = true;
+	while (bMenuActive) {
+		if (this->getFpsTime() > 100.f / this->MAX_FRAMERATE) {
+			this->window->clear(sf::Color::Green); //clear old frame with green (green background if nothing drawn)
+
+
+			//draw game
+			//this->renderAlf(*this->window);
+			//this->renderPlayer(*this->window);
+			this->renderMenu(*this->window);
+
+			//display game
+			this->window->display(); //render new frame
+
+			this->updateFpsTime();
+		}
+		while (this->window->pollEvent(this->event)) {
+			switch (this->event.type)
+			{
+			case sf::Event::Closed:
+				this->window->close();
+				break;
+			case sf::Event::KeyPressed:
+				/*               if(events.key.code == sf::Keyboard::Escape)
+									game.menu()*/
+
+				if (this->event.key.code == sf::Keyboard::Escape) {
+					bMenuActive = false;
+					break;
+				}
+				if (this->event.key.code == sf::Keyboard::S)
+					this->menu->setSelection(false);
+				if (this->event.key.code == sf::Keyboard::W)
+					this->menu->setSelection(true);
+				if (this->event.key.code == sf::Keyboard::Enter) {
+					this->enter();
+					break;
+				}
+			}
+		}
+	}
+	delete this->menu;
 }
 
 void Game::updateFpsTime()
@@ -117,7 +171,7 @@ void Game::pollEvents()
 								game.menu()*/
 
 			if (this->event.key.code == sf::Keyboard::Escape)
-				this->window->close();
+				this->menuPause();
 			if (this->event.key.code == sf::Keyboard::A)
 				this->keys.A = true;
 			if (this->event.key.code == sf::Keyboard::S)
@@ -128,8 +182,6 @@ void Game::pollEvents()
 				this->keys.W = true;
 			break;
 		case sf::Event::KeyReleased:
-			if (this->event.key.code == sf::Keyboard::Escape)
-				this->window->close();
 			if (this->event.key.code == sf::Keyboard::A)
 				this->keys.A = false;
 			if (this->event.key.code == sf::Keyboard::S)
@@ -145,6 +197,8 @@ void Game::pollEvents()
 
 void Game::update()
 {
+	sf::Mouse mouse;
+	//std::cout << mouse.getPosition(*window).x << " " << mouse.getPosition(*window).y << std::endl;
 	this->pollEvents();
 	this->updateKeys();
 	this->player->updatePos();
@@ -165,8 +219,9 @@ void Game::render()
 	if (this->getFpsTime() > 100.f / this->MAX_FRAMERATE) {
 		this->window->clear(sf::Color::Green); //clear old frame with green (green background if nothing drawn)
 		//draw game
+		this->renderAlf(*this->window);
 		this->renderPlayer(*this->window);
-		this->renderMenu(*this->window);
+		//this->renderMenu(*this->window);
 		//display game
 		this->window->display(); //render new frame
 
@@ -182,8 +237,28 @@ void Game::renderPlayer(sf::RenderTarget& target)
 void Game::renderMenu(sf::RenderTarget& target)
 {
 	target.draw(this->menu->getBody());
-	for (int i = 0; i < 3; i++) {
-		target.draw(this->menu->getMenuPause()[i]);
+	for (auto &text : *this->menu->getMenuText()) {
+		target.draw(text);
 	}
 }
 
+void Game::renderAlf(sf::RenderTarget& target)
+{
+	target.draw(this->spr_alf);
+}
+
+void Game::enter()
+{
+	switch (this->menu->getSelection())
+	{
+	case 0: //RESUME
+		this->bMenuActive = false;
+		break;
+	case 1: //SETTINGS - not implemented yet
+		break;
+	case 2:
+		this->bMenuActive = false;
+		this->window->close();
+		break;
+	}
+}

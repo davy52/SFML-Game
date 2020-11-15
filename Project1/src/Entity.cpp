@@ -35,7 +35,7 @@ Entity::Entity(sf::Vector2f size) : RectangleShape(size)
 
 Entity::~Entity()
 {
-	RectangleShape::~RectangleShape();
+	//RectangleShape::~RectangleShape();
 	delete this->EntityClock;
 }
 
@@ -95,5 +95,5 @@ Player::Player(sf::Vector2f size) : Entity(size)
 
 Player::~Player()
 {
-	Entity::~Entity();
+
 }

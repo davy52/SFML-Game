@@ -10,10 +10,8 @@ int main(void)
     game->setMaxFramerate(30);
 
 
-
     //Game Loop
     while (game->isRunning()){
-       
 
         //UPDATE
         game->update();

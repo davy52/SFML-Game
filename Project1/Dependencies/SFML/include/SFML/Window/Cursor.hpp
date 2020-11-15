@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2018 Laurent Gomila (laurent@sfml-dev.org)
+// Copyright (C) 2007-2020 Laurent Gomila (laurent@sfml-dev.org)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -75,19 +75,19 @@ public:
     ////////////////////////////////////////////////////////////
     enum Type
     {
-        Arrow,                  ///< Arrow cursor (default)
-        ArrowWait,              ///< Busy arrow cursor
-        Wait,                   ///< Busy cursor
-        Text,                   ///< I-beam, cursor when hovering over a field allowing text entry
-        Hand,                   ///< Pointing hand cursor
-        SizeHorizontal,         ///< Horizontal double arrow cursor
-        SizeVertical,           ///< Vertical double arrow cursor
-        SizeTopLeftBottomRight, ///< Double arrow cursor going from top-left to bottom-right
-        SizeBottomLeftTopRight, ///< Double arrow cursor going from bottom-left to top-right
-        SizeAll,                ///< Combination of SizeHorizontal and SizeVertical
-        Cross,                  ///< Crosshair cursor
-        Help,                   ///< Help cursor
-        NotAllowed              ///< Action not allowed cursor
+        Arrow,                  //!< Arrow cursor (default)
+        ArrowWait,              //!< Busy arrow cursor
+        Wait,                   //!< Busy cursor
+        Text,                   //!< I-beam, cursor when hovering over a field allowing text entry
+        Hand,                   //!< Pointing hand cursor
+        SizeHorizontal,         //!< Horizontal double arrow cursor
+        SizeVertical,           //!< Vertical double arrow cursor
+        SizeTopLeftBottomRight, //!< Double arrow cursor going from top-left to bottom-right
+        SizeBottomLeftTopRight, //!< Double arrow cursor going from bottom-left to top-right
+        SizeAll,                //!< Combination of SizeHorizontal and SizeVertical
+        Cross,                  //!< Crosshair cursor
+        Help,                   //!< Help cursor
+        NotAllowed              //!< Action not allowed cursor
     };
 
 public:
@@ -129,7 +129,8 @@ public:
     /// position is. Any mouse actions that are performed will
     /// return the window/screen location of the hotspot.
     ///
-    /// \warning On Unix, the pixels are mapped into a monochrome
+    /// \warning On Unix platforms which do not support colored
+    ///          cursors, the pixels are mapped into a monochrome
     ///          bitmap: pixels with an alpha channel to 0 are
     ///          transparent, black if the RGB channel are close
     ///          to zero, and white otherwise.
@@ -161,7 +162,7 @@ public:
 
 private:
 
-    friend class Window;
+    friend class WindowBase;
 
     ////////////////////////////////////////////////////////////
     /// \brief Get access to the underlying implementation
@@ -179,7 +180,7 @@ private:
     ////////////////////////////////////////////////////////////
     // Member data
     ////////////////////////////////////////////////////////////
-    priv::CursorImpl* m_impl; ///< Platform-specific implementation of the cursor
+    priv::CursorImpl* m_impl; //!< Platform-specific implementation of the cursor
 };
 
 } // namespace sf
