@@ -1,31 +1,21 @@
 #include "Game.h"
 
 //Inits
-void Game::initAlf()
-{
-	if (!this->tex_alf.loadFromFile("Resources/Background/temporary-alf.png")) {
-		std::cout << "Alfa nie ma" << std::endl;
-	}
-	this->spr_alf.setPosition(0, 0);
-	this->spr_alf.setTexture(this->tex_alf);
-	this->spr_alf.setScale(0.5, 0.5);
-}
 
 void Game::initVariables()
 {
 	this->MAX_FRAMERATE = 60;
 
 	this->window = nullptr;
-	this->videomode.width = 800;
-	this->videomode.height = 600;
-	this->keys = { false, false, false, false };
+	this->videomode.width = 1600;
+	this->videomode.height = 900;
 	this->window_size = sf::Vector2u(800, 600);
 
 }
 
 void Game::initWindow()
 {
-	this->window = new sf::RenderWindow(this->videomode, "First Window", sf::Style::Titlebar | sf::Style::Close);
+	this->window = new sf::RenderWindow(this->videomode , "First Window", sf::Style::Titlebar | sf::Style::Close);
 }
 
 void Game::initClock()
@@ -33,6 +23,11 @@ void Game::initClock()
 	this->clock = new sf::Clock; //start timer
 	this->engine_time1 = this->clock->getElapsedTime();
 	this->fps_time1 = this->clock->getElapsedTime();
+}
+
+void Game::initLevel()
+{
+	this->level = new Level();
 }
 
 void Game::initPlayer()
@@ -49,31 +44,14 @@ void Game::initMenu()
 }
 
 //PrivateFunctions
-void Game::updateKeys()
-{
-	if (this->keys.A == true)
-		this->player->updateVel(sf::Vector2f(-5.f, 0.f));
-	else if (this->keys.D == true)
-		this->player->updateVel(sf::Vector2f(5.f, 0.f));
-	else
-		this->player->updateVel(sf::Vector2f(0.f, 0.f));
-
-	if (this->keys.W == true)
-		this->player->updateVel(sf::Vector2f(0.f, -5.f));
-	else if (this->keys.S == true)
-		this->player->updateVel(sf::Vector2f(0.f, 5.f));
-	else
-		this->player->updateVel(sf::Vector2f(0.f, 0.f));
-
-}
 
 //Constructor/Deconstructor
 Game::Game()
 {
-	this->initAlf();
 	this->initVariables();
 	this->initWindow();
 	this->initClock();
+	this->initLevel();
 	this->initPlayer();
 	this->initPlayer();
 	//this->initMenu();
@@ -167,29 +145,28 @@ void Game::pollEvents()
 			this->window->close();
 			break;
 		case sf::Event::KeyPressed:
-			/*               if(events.key.code == sf::Keyboard::Escape)
-								game.menu()*/
-
-			if (this->event.key.code == sf::Keyboard::Escape)
+			switch (event.key.code)
+			{
+			case sf::Keyboard::Escape:
 				this->menuPause();
-			if (this->event.key.code == sf::Keyboard::A)
-				this->keys.A = true;
-			if (this->event.key.code == sf::Keyboard::S)
-				this->keys.S = true;
-			if (this->event.key.code == sf::Keyboard::D)
-				this->keys.D = true;
-			if (this->event.key.code == sf::Keyboard::W)
-				this->keys.W = true;
+				break;
+			case sf::Keyboard::W:
+				this->player->keys(sf::Keyboard::W);
+				break;
+			case sf::Keyboard::A:
+				this->player->keys(sf::Keyboard::A);
+				break;
+			case sf::Keyboard::S:
+				this->player->keys(sf::Keyboard::S);
+				break;
+			case sf::Keyboard::D:
+				this->player->keys(sf::Keyboard::D);
+				break;
+			default:
+				break;
+			}
 			break;
 		case sf::Event::KeyReleased:
-			if (this->event.key.code == sf::Keyboard::A)
-				this->keys.A = false;
-			if (this->event.key.code == sf::Keyboard::S)
-				this->keys.S = false;
-			if (this->event.key.code == sf::Keyboard::D)
-				this->keys.D = false;
-			if (this->event.key.code == sf::Keyboard::W)
-				this->keys.W = false;
 			break;
 		}
 	}
@@ -197,11 +174,9 @@ void Game::pollEvents()
 
 void Game::update()
 {
-	sf::Mouse mouse;
+	//sf::Mouse mouse;
 	//std::cout << mouse.getPosition(*window).x << " " << mouse.getPosition(*window).y << std::endl;
 	this->pollEvents();
-	this->updateKeys();
-	this->player->updatePos();
 	//print pos of mouse on monitor
 	//std::cout << "Absolute mouse pos: " << sf::Mouse::getPosition().x << "\t" << sf::Mouse::getPosition().y;
 	//
@@ -217,9 +192,9 @@ void Game::render()
 		Renders game
 	*/
 	if (this->getFpsTime() > 100.f / this->MAX_FRAMERATE) {
-		this->window->clear(sf::Color::Green); //clear old frame with green (green background if nothing drawn)
+		this->window->clear(sf::Color(0, 120, 80, 255)); //clear old frame with green (green background if nothing drawn)
 		//draw game
-		this->renderAlf(*this->window);
+		this->level->draw(*this->window);
 		this->renderPlayer(*this->window);
 		//this->renderMenu(*this->window);
 		//display game
@@ -240,11 +215,6 @@ void Game::renderMenu(sf::RenderTarget& target)
 	for (auto &text : *this->menu->getMenuText()) {
 		target.draw(text);
 	}
-}
-
-void Game::renderAlf(sf::RenderTarget& target)
-{
-	target.draw(this->spr_alf);
 }
 
 void Game::enter()

@@ -28,9 +28,6 @@ public:
 
 
 	//Methods
-	void setVel(sf::Vector2f v); 
-	void updatePos();
-	void updateVel(sf::Vector2f a);
 
 
 
@@ -48,5 +45,6 @@ public:
 	//Accessors
 
 	//Methods
+	void keys(sf::Keyboard::Key key);
 };
 

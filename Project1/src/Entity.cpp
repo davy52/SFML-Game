@@ -55,34 +55,10 @@ sf::Vector2f Entity::getVel() const
 	return this->vel;
 }
 
+
+
 //Methods
 
-
-void Entity::setVel(sf::Vector2f v)
-{
-	this->vel = v;
-}
-
-void Entity::updatePos()
-{
-	this->time2 = this->EntityClock->getElapsedTime();
-	float deltaT = this->time2.asSeconds() - this->time1.asSeconds();
-	this->setPosition(this->getPosition() + (this->vel * deltaT));
-	this->time1 = this->time2;
-}
-
-void Entity::updateVel(sf::Vector2f a)
-{
-	this->vel += a;
-	if (this->vel.x > this->getMaxVel())
-		this->vel.x = this->getMaxVel();
-	else if (this->vel.x < -this->getMaxVel())
-		this->vel.x = -this->getMaxVel();
-	if (this->vel.y > this->getMaxVel())
-		this->vel.y = this->getMaxVel();
-	else if (this->vel.y < -this->getMaxVel())
-		this->vel.y = -this->getMaxVel();
-}
 
 //=================================================Player
 
@@ -96,4 +72,40 @@ Player::Player(sf::Vector2f size) : Entity(size)
 Player::~Player()
 {
 
+}
+
+void Player::keys(sf::Keyboard::Key key)
+{
+	float speed = 10.f;
+	switch (key)
+	{
+	case sf::Keyboard::Unknown:
+		break;
+	case sf::Keyboard::A:
+		this->move(-speed, 0.f);
+		break;
+	case sf::Keyboard::Left:
+		this->move(-speed, 0.f);
+		break;
+	case sf::Keyboard::D:
+		this->move(speed, 0.f);
+		break;
+	case sf::Keyboard::Right:
+		this->move(speed, 0.f);
+		break;
+	case sf::Keyboard::S:
+		this->move(0.f, speed);
+		break;
+	case sf::Keyboard::Down:
+		this->move(0.f, speed);
+		break;
+	case sf::Keyboard::W:
+		this->move(0.f, -speed);
+		break;
+	case sf::Keyboard::Up:
+		this->move(0.f, -speed);
+		break;
+	case sf::Keyboard::Space:
+		break;
+	}
 }

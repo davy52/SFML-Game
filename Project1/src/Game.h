@@ -10,13 +10,12 @@
 
 #include "Entity.h"
 #include "Menu.h"
+#include "Level.h"
 
 class Game
 {
 private:
 	int MAX_FRAMERATE;
-	sf::Texture tex_alf;
-	sf::Sprite spr_alf;
 	//Window
 	sf::RenderWindow* window;
 	sf::Vector2u window_size;
@@ -27,17 +26,10 @@ private:
 	Menu* menu;
 	bool bMenuActive = false;
 
+	//Level
+	Level* level;
 	//Entities
-	Entity* player;
-
-	typedef struct {
-		bool W;
-		bool A;
-		bool S;
-		bool D;
-	} Keys;
-
-	Keys keys;
+	Player* player;
 
 	//Clock
 	sf::Clock* clock;
@@ -45,15 +37,14 @@ private:
 	sf::Time engine_time1, engine_time2; // do ograniczania predkosci wykonywania obliczen np. jak czesto sprawdzac 
 
 	//Inits
-	void initAlf();
 	void initVariables();
 	void initWindow();
 	void initClock();
+	void initLevel();
 	void initPlayer();
 	void initMenu();
 
 	//PrivateFunctions
-	void updateKeys();
 	int getFpsTime();
 	void updateFpsTime();
 
@@ -68,6 +59,7 @@ public:
 
 	//Methods
 	void setMaxFramerate(uint16_t frames);
+
 	void menuPause();
 
 	void pollEvents();
@@ -77,7 +69,6 @@ public:
 	void renderPlayer(sf::RenderTarget& target);
 	void renderMenu(sf::RenderTarget& target);
 
-	void renderAlf(sf::RenderTarget& target);
 
 	void enter();
 
