@@ -22,6 +22,10 @@ private:
 	sf::Event event;
 	sf::VideoMode videomode;
 
+	//View
+	sf::View view1;
+	sf::View minimap;
+
 	//Menu
 	Menu* menu;
 	bool bMenuActive = false;
@@ -43,6 +47,7 @@ private:
 	void initLevel();
 	void initPlayer();
 	void initMenu();
+	void initView();
 
 	//PrivateFunctions
 	int getFpsTime();

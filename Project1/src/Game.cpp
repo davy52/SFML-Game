@@ -15,7 +15,7 @@ void Game::initVariables()
 
 void Game::initWindow()
 {
-	this->window = new sf::RenderWindow(this->videomode , "First Window", sf::Style::Titlebar | sf::Style::Close);
+	this->window = new sf::RenderWindow(this->videomode, "First Window", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
 }
 
 void Game::initClock()
@@ -43,6 +43,14 @@ void Game::initMenu()
 
 }
 
+void Game::initView()
+{
+	this->view1.reset(sf::FloatRect(0.f, 0.f, 800.f, 450.f));
+	this->minimap.reset(sf::FloatRect(0.f, 0.f, this->videomode.width, this->videomode.height));
+	this->view1.setViewport(sf::FloatRect(0.f, 0.f, 1.f, 1.f));
+	this->minimap.setViewport(sf::FloatRect(0.75f, 0.f, 0.25, 0.25f));
+}
+
 //PrivateFunctions
 
 //Constructor/Deconstructor
@@ -55,6 +63,7 @@ Game::Game()
 	this->initPlayer();
 	this->initPlayer();
 	//this->initMenu();
+	this->initView();
 }
 
 Game::~Game()
@@ -122,8 +131,12 @@ void Game::menuPause()
 					this->menu->setSelection(true);
 				if (this->event.key.code == sf::Keyboard::Enter) {
 					this->enter();
-					break;
 				}
+				break;
+			case sf::Event::Resized:
+				sf::FloatRect visibleArea(0.f, 0.f, event.size.width, event.size.height);
+				this->view1.reset(visibleArea);
+				break;
 			}
 		}
 	}
@@ -194,6 +207,12 @@ void Game::render()
 	if (this->getFpsTime() > 100.f / this->MAX_FRAMERATE) {
 		this->window->clear(sf::Color(0, 120, 80, 255)); //clear old frame with green (green background if nothing drawn)
 		//draw game
+		this->window->setView(this->view1);
+		this->view1.setCenter(this->player->getPos());
+		this->level->draw(*this->window);
+		this->renderPlayer(*this->window);
+
+		this->window->setView(this->minimap);
 		this->level->draw(*this->window);
 		this->renderPlayer(*this->window);
 		//this->renderMenu(*this->window);
