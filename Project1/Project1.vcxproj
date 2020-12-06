@@ -167,14 +167,14 @@
     <ClCompile Include="src\Level.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Menu.cpp" />
-    <ClCompile Include="View.cpp" />
+    <ClCompile Include="src\View.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\Level.h" />
     <ClInclude Include="src\Menu.h" />
-    <ClInclude Include="View.h" />
+    <ClInclude Include="src\View.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitignore" />

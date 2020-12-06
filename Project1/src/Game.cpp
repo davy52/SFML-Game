@@ -100,7 +100,7 @@ void Game::menuPause()
 		if (this->getFpsTime() > 100.f / this->MAX_FRAMERATE) {
 			this->window->clear(sf::Color::Green); //clear old frame with green (green background if nothing drawn)
 
-
+			this->window->setView(this->view1);
 			//draw game
 			//this->renderAlf(*this->window);
 			//this->renderPlayer(*this->window);
@@ -164,16 +164,16 @@ void Game::pollEvents()
 				this->menuPause();
 				break;
 			case sf::Keyboard::W:
-				this->player->keys(sf::Keyboard::W);
+				this->player->keys(sf::Keyboard::W, this->getFpsTime());
 				break;
 			case sf::Keyboard::A:
-				this->player->keys(sf::Keyboard::A);
+				this->player->keys(sf::Keyboard::A, this->getFpsTime());
 				break;
 			case sf::Keyboard::S:
-				this->player->keys(sf::Keyboard::S);
+				this->player->keys(sf::Keyboard::S, this->getFpsTime());
 				break;
 			case sf::Keyboard::D:
-				this->player->keys(sf::Keyboard::D);
+				this->player->keys(sf::Keyboard::D, this->getFpsTime());
 				break;
 			default:
 				break;
@@ -213,6 +213,7 @@ void Game::render()
 		this->renderPlayer(*this->window);
 
 		this->window->setView(this->minimap);
+		this->minimap.setCenter(this->player->getPos());
 		this->level->draw(*this->window);
 		this->renderPlayer(*this->window);
 		//this->renderMenu(*this->window);

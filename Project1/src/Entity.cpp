@@ -1,5 +1,5 @@
 #include "Entity.h"
-
+#include <iostream>
 
 //=================================================Entity 
 
@@ -9,8 +9,8 @@ void Entity::initBody()
 	this->MAX_VEL = 50.f;
 
 	this->setPosition(sf::Vector2f(0.f, 0.f));
-	this->setSize(sf::Vector2f(100.f, 100.f));
-	this->setScale(sf::Vector2f(0.5f, 0.5f));
+	this->setSize(sf::Vector2f(62.f, 62.f));
+	this->setScale(sf::Vector2f(1.f, 1.f));
 	this->setFillColor(sf::Color::Cyan);
 	this->setOutlineColor(sf::Color::Black);
 	this->setOutlineThickness(2.f);
@@ -74,9 +74,11 @@ Player::~Player()
 
 }
 
-void Player::keys(sf::Keyboard::Key key)
+void Player::keys(sf::Keyboard::Key key, int time_mils)
 {
-	float speed = 10.f;
+	const float speed_const = 1000.f;
+	double speed = speed_const * time_mils * (1.f / 1000.f);
+	std::cout << "time_mils: " << time_mils << "\t speed: " << speed << std::endl;
 	switch (key)
 	{
 	case sf::Keyboard::Unknown:

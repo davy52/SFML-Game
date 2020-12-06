@@ -3,20 +3,20 @@
 void Level::initVariables()
 {
 	this->tileSize = 16;
-	this->tileScale = 3;
+	this->tileScale = 4;
 	Level::tileSet;
 	Level::tileSet.loadFromFile("Resources/TileSets/tileset1.png");
 
-	this->mapSize = sf::Vector2u(30, 5);
+	this->mapSize = sf::Vector2u(60, 10);
 
 
-	this->tiles = new std::vector<sf::Sprite>(this->mapSize.x * this->mapSize.y);
+	//this->tiles = new std::vector<sf::Sprite>(0);
 
 
 
 
 	int x = 0, y = 0;
-	for (sf::Sprite& sprite : *this->tiles) {
+	/*for (sf::Sprite& sprite : *this->tiles) {
 
 		if (this->tileMap[y * this->mapSize.x + x] == 'G') {
 			sprite.setTexture(this->tileSet);
@@ -33,7 +33,37 @@ void Level::initVariables()
 		if (x == this->mapSize.x - 1) {
 			y++;
 			x = 0;
-		}else {
+		}
+		else {
+			x++;
+		}
+	}*/
+	int tN = 0;
+	for (int i = 0; i < this->mapSize.x * this->mapSize.y; i++) {
+		if (this->tileMap[(y * this->mapSize.x) + x] != '.') {
+			Tile temp(this->tileSet);
+			this->tiles.push_back(temp);
+			switch (this->tileMap[(y * this->mapSize.x) + x])
+			{
+			case 'G':
+				this->tiles[tN].setTextureRect(sf::IntRect(0, 0, 16, 16));
+				this->tiles[tN].setColl(CollisionType::Solid);
+				break;
+			case 'B':
+				this->tiles[tN].setTextureRect(sf::IntRect(16, 0, 16, 16));
+				this->tiles[tN].setColl(CollisionType::Solid);
+				break;
+			}
+			this->tiles[tN].setScale(this->tileScale, this->tileScale);
+			this->tiles[tN].setPosition(x * this->tileSize * this->tileScale, y * this->tileSize * this->tileScale);
+			tN++;
+		}
+
+		if (x == this->mapSize.x - 1) {
+			y++;
+			x = 0;
+		}
+		else {
 			x++;
 		}
 	}
@@ -48,13 +78,13 @@ Level::Level()
 
 Level::~Level()
 {
-	delete this->tiles;
+	//delete this->tiles;
 	delete this->tileMap;
 }
 
 void Level::draw(sf::RenderTarget& target)
 {
-	for (sf::Sprite& sprite : *this->tiles) {
+	for (sf::Sprite& sprite : this->tiles) {
 		target.draw(sprite);
 	}
 }

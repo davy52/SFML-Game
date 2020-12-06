@@ -45,6 +45,6 @@ public:
 	//Accessors
 
 	//Methods
-	void keys(sf::Keyboard::Key key);
+	void keys(sf::Keyboard::Key key, int time_mils);
 };
 
