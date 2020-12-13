@@ -8,10 +8,11 @@
 class Entity : public sf::RectangleShape 
 {
 protected:
-	sf::Clock* EntityClock;
-	float MAX_VEL;
-	sf::Vector2f vel;
-	sf::Time time1, time2;
+	sf::Vector2f MAX_VEL = sf::Vector2f(4.f, 5.f); //horizontal and upwards maximum velocity, falling wont be capped
+	sf::Vector2f acceleration = sf::Vector2f(1.f, 1.f); // running and jump accel
+	float g = 10.f;
+
+	
 
 	//Inits
 	void initBody();
@@ -21,14 +22,23 @@ public:
 	Entity(sf::Vector2f size);
 	~Entity();
 
+	//clock
+	sf::Clock* EntityClock;
+	sf::Time time1, time2;
+
+	//velocity
+	sf::Vector2f vel;
+
+
 	//Accessors
-	float getMaxVel();
+	sf::Vector2f getMaxVel();
 	sf::Vector2f getPos() const;
 	sf::Vector2f getVel() const;
+	sf::Vector2f get_acc();
 
 
 	//Methods
-
+	void move_vel();
 
 
 };
@@ -45,6 +55,6 @@ public:
 	//Accessors
 
 	//Methods
-	void keys(sf::Keyboard::Key key, int time_mils);
+	//void keys(sf::Keyboard::Key key, int time_mils);
 };
 

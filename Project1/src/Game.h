@@ -11,6 +11,7 @@
 #include "Entity.h"
 #include "Menu.h"
 #include "Level.h"
+#include "Controller.h"
 
 class Game
 {
@@ -35,6 +36,9 @@ private:
 	//Entities
 	Player* player;
 
+	//controler
+	Controller* controller;
+
 	//Clock
 	sf::Clock* clock;
 	sf::Time fps_time1, fps_time2; // do ograniczania predkosci wyswietlania klatek
@@ -48,6 +52,7 @@ private:
 	void initPlayer();
 	void initMenu();
 	void initView();
+	void initController();
 
 	//PrivateFunctions
 	int getFpsTime();

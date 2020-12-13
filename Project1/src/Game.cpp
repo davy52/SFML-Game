@@ -51,6 +51,11 @@ void Game::initView()
 	this->minimap.setViewport(sf::FloatRect(0.75f, 0.f, 0.25, 0.25f));
 }
 
+void Game::initController()
+{
+	controller = new Controller(*this->player);
+}
+
 //PrivateFunctions
 
 //Constructor/Deconstructor
@@ -64,14 +69,19 @@ Game::Game()
 	this->initPlayer();
 	//this->initMenu();
 	this->initView();
+	this->initController();
+
+	controller->start_movement();
 }
 
 Game::~Game()
 {
+	controller->stop_movement();
 	delete this->window;
 	delete this->clock;
 	//delete this->menu;
 	delete this->player;
+	delete this->controller;
 }
 	
 //Accessors
@@ -158,6 +168,10 @@ void Game::pollEvents()
 			this->window->close();
 			break;
 		case sf::Event::KeyPressed:
+			if (event.key.code == sf::Keyboard::Escape) {
+				this->menuPause();
+			}
+/*
 			switch (event.key.code)
 			{
 			case sf::Keyboard::Escape:
@@ -175,21 +189,19 @@ void Game::pollEvents()
 			case sf::Keyboard::D:
 				this->player->keys(sf::Keyboard::D, this->getFpsTime());
 				break;
-			default:
-				break;
-			}
-			break;
-		case sf::Event::KeyReleased:
-			break;
+*/
 		}
 	}
 }
 
 void Game::update()
 {
+
+	//controller->move_tWorker();
 	//sf::Mouse mouse;
 	//std::cout << mouse.getPosition(*window).x << " " << mouse.getPosition(*window).y << std::endl;
 	this->pollEvents();
+
 	//print pos of mouse on monitor
 	//std::cout << "Absolute mouse pos: " << sf::Mouse::getPosition().x << "\t" << sf::Mouse::getPosition().y;
 	//
@@ -205,6 +217,7 @@ void Game::render()
 		Renders game
 	*/
 	if (this->getFpsTime() > 100.f / this->MAX_FRAMERATE) {
+		player->move_vel();
 		this->window->clear(sf::Color(0, 120, 80, 255)); //clear old frame with green (green background if nothing drawn)
 		//draw game
 		this->window->setView(this->view1);

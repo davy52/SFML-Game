@@ -6,7 +6,6 @@
 //Inits
 void Entity::initBody()
 {
-	this->MAX_VEL = 50.f;
 
 	this->setPosition(sf::Vector2f(0.f, 0.f));
 	this->setSize(sf::Vector2f(62.f, 62.f));
@@ -39,7 +38,7 @@ Entity::~Entity()
 	delete this->EntityClock;
 }
 
-float Entity::getMaxVel()
+sf::Vector2f Entity::getMaxVel()
 {
 	return this->MAX_VEL;
 }
@@ -53,6 +52,16 @@ sf::Vector2f Entity::getPos() const
 sf::Vector2f Entity::getVel() const
 {
 	return this->vel;
+}
+
+sf::Vector2f Entity::get_acc()
+{
+	return this->acceleration;
+}
+
+void Entity::move_vel()
+{
+	this->move(this->vel);
 }
 
 
@@ -74,40 +83,40 @@ Player::~Player()
 
 }
 
-void Player::keys(sf::Keyboard::Key key, int time_mils)
-{
-	const float speed_const = 1000.f;
-	double speed = speed_const * time_mils * (1.f / 1000.f);
-	std::cout << "time_mils: " << time_mils << "\t speed: " << speed << std::endl;
-	switch (key)
-	{
-	case sf::Keyboard::Unknown:
-		break;
-	case sf::Keyboard::A:
-		this->move(-speed, 0.f);
-		break;
-	case sf::Keyboard::Left:
-		this->move(-speed, 0.f);
-		break;
-	case sf::Keyboard::D:
-		this->move(speed, 0.f);
-		break;
-	case sf::Keyboard::Right:
-		this->move(speed, 0.f);
-		break;
-	case sf::Keyboard::S:
-		this->move(0.f, speed);
-		break;
-	case sf::Keyboard::Down:
-		this->move(0.f, speed);
-		break;
-	case sf::Keyboard::W:
-		this->move(0.f, -speed);
-		break;
-	case sf::Keyboard::Up:
-		this->move(0.f, -speed);
-		break;
-	case sf::Keyboard::Space:
-		break;
-	}
-}
+//void Player::keys(sf::Keyboard::Key key, int time_mils)
+//{
+//	const float speed_const = 10000.f;
+//	double speed = speed_const * time_mils / 1000;
+//	std::cout << "time_mils: " << time_mils << "\t speed: " << speed << std::endl;
+//	switch (key)
+//	{
+//	case sf::Keyboard::Unknown:
+//		break;
+//	case sf::Keyboard::A:
+//		this->move(-speed, 0.f);
+//		break;
+//	case sf::Keyboard::Left:
+//		this->move(-speed, 0.f);
+//		break;
+//	case sf::Keyboard::D:
+//		this->move(speed, 0.f);
+//		break;
+//	case sf::Keyboard::Right:
+//		this->move(speed, 0.f);
+//		break;
+//	case sf::Keyboard::S:
+//		this->move(0.f, speed);
+//		break;
+//	case sf::Keyboard::Down:
+//		this->move(0.f, speed);
+//		break;
+//	case sf::Keyboard::W:
+//		this->move(0.f, -speed);
+//		break;
+//	case sf::Keyboard::Up:
+//		this->move(0.f, -speed);
+//		break;
+//	case sf::Keyboard::Space:
+//		break;
+//	}
+//}
