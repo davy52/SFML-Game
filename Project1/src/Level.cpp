@@ -88,3 +88,8 @@ void Level::draw(sf::RenderTarget& target)
 		target.draw(sprite);
 	}
 }
+
+std::vector<Tile>& Level::getTiles()
+{
+	return this->tiles;
+}

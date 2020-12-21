@@ -42,5 +42,6 @@ public:
 	~Level();
 
 	void draw(sf::RenderTarget& target);
+	std::vector<Tile>& getTiles();
 };
 

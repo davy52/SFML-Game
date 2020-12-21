@@ -53,7 +53,7 @@ void Game::initView()
 
 void Game::initController()
 {
-	controller = new Controller(*this->player);
+	controller = new Controller(*this->player, this->level->getTiles());
 }
 
 //PrivateFunctions
@@ -217,7 +217,7 @@ void Game::render()
 		Renders game
 	*/
 	if (this->getFpsTime() > 100.f / this->MAX_FRAMERATE) {
-		player->move_vel();
+		//player->move_vel();
 		this->window->clear(sf::Color(0, 120, 80, 255)); //clear old frame with green (green background if nothing drawn)
 		//draw game
 		this->window->setView(this->view1);
