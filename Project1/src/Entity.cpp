@@ -8,7 +8,7 @@ void Entity::initBody()
 {
 
 	this->setPosition(sf::Vector2f(0.f, 0.f));
-	this->setSize(sf::Vector2f(62.f, 62.f));
+	this->setSize(sf::Vector2f(64.f, 64.f));
 	this->setScale(sf::Vector2f(1.f, 1.f));
 	this->setFillColor(sf::Color::Cyan);
 	this->setOutlineColor(sf::Color::Black);

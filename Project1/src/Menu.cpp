@@ -107,6 +107,25 @@ int Menu::getSelection() const
 }
 
 //Methods
+
+void Menu::setBodyPos(sf::Vector2f pos)
+{
+	sf::Vector2f dxy = pos - this->body->getPosition() - sf::Vector2f(this->body->getSize().x/2, this->body->getSize().y/2);
+
+	this->body->move(dxy);
+
+	for (auto& text : *this->menuText) {
+		text.move(dxy);
+	}
+}
+
+void Menu::MoveText(sf::Vector2f dxy)
+{
+	for (auto& text : *this->menuText) {
+		text.move(dxy);
+	}
+}
+
 void Menu::setTextPosition(sf::Vector2f pos)
 {
 	int i = 0;

@@ -37,6 +37,8 @@ public:
 	std::vector<sf::Text>* getMenuText() const;
 	int getSelection() const;
 	//Methods
+	void setBodyPos(sf::Vector2f pos);
+	void MoveText(sf::Vector2f dxy);
 	void setTextPosition(sf::Vector2f pos);
 	void setSelection(bool up);
 

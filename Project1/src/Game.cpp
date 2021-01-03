@@ -53,7 +53,7 @@ void Game::initView()
 
 void Game::initController()
 {
-	controller = new Controller(*this->player, this->level->getTiles());
+	controller = new Controller(*this->player, this->level->getTiles(), this->bMenuActive);
 }
 
 //PrivateFunctions
@@ -244,6 +244,7 @@ void Game::renderPlayer(sf::RenderTarget& target)
 
 void Game::renderMenu(sf::RenderTarget& target)
 {
+	this->menu->setBodyPos(this->player->getPosition());
 	target.draw(this->menu->getBody());
 	for (auto &text : *this->menu->getMenuText()) {
 		target.draw(text);
