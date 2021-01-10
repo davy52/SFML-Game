@@ -12,6 +12,9 @@
 #include "Menu.h"
 #include "Level.h"
 #include "Controller.h"
+#include "MainMenu.h"
+
+#include "global_structs.h"
 
 class Game
 {
@@ -27,9 +30,14 @@ private:
 	sf::View view1;
 	sf::View minimap;
 
+
+	GAME_STATE gState;
+
 	//Menu
 	Menu* menu;
 	bool bMenuActive = false;
+
+	MainMenu* mainMenu;
 
 	//Level
 	Level* level;
@@ -81,6 +89,15 @@ public:
 
 
 	void enter();
+
+	//RENDERS
+	void render_main();
+	
+	void render_pause();
+			
+	void render_game();
+			
+	void render_f1();
 
 	
 

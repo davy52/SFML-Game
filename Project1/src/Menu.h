@@ -16,7 +16,7 @@ private:
 	std::vector<sf::Text>* menuText;
 	enum options
 	{
-		RESUME = 0, SETTINGS = 1, EXIT = 2
+		RESUME = 0, SETTINGS = 2, EXIT = 1
 	};
 	options selected;
 

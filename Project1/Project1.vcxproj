@@ -167,6 +167,7 @@
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Level.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\MainMenu.cpp" />
     <ClCompile Include="src\Menu.cpp" />
     <ClCompile Include="src\View.cpp" />
   </ItemGroup>
@@ -174,7 +175,10 @@
     <ClInclude Include="src\Controller.h" />
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\global_structs.h" />
     <ClInclude Include="src\Level.h" />
+    <ClInclude Include="src\MainMenu.h" />
+    <ClInclude Include="src\MainMenuSelectors.h" />
     <ClInclude Include="src\Menu.h" />
     <ClInclude Include="src\View.h" />
   </ItemGroup>

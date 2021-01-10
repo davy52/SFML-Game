@@ -1,10 +1,14 @@
 #include "Controller.h"
 void Controller::move_tWorker()
 {
+
 	body.time1 = body.EntityClock->getElapsedTime();
 	std::chrono::steady_clock::time_point start = std::chrono::high_resolution_clock::now();
 	std::chrono::steady_clock::time_point stop;
 	while (bMove) {
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+
 		stop = std::chrono::high_resolution_clock::now();
 		auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
 		std::cout << duration.count() << "us" << std::endl;
@@ -13,6 +17,8 @@ void Controller::move_tWorker()
 		float dt = body.EntityClock->getElapsedTime().asMilliseconds() - body.time1.asMilliseconds();
 		dt /= 1000;
 		body.time1 = body.EntityClock->getElapsedTime();
+
+		if (gState != GAME_STATE::PLAYING) continue;
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
 			//body.vel.x += (-body.getMaxVel().x * body.get_acc().x * dt);
@@ -29,6 +35,14 @@ void Controller::move_tWorker()
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
 			body.vel.y += (body.get_acc().y * dt);
 		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+			this->gState = GAME_STATE::PAUSE;
+			
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::F1)) {
+			this->gState = GAME_STATE::F1;
+		}
+
 
 
 		//cap speed
@@ -152,7 +166,6 @@ void Controller::move_tWorker()
 
 		}
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));	
 	}														
 }
 

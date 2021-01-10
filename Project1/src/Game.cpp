@@ -11,6 +11,8 @@ void Game::initVariables()
 	this->videomode.height = 900;
 	this->window_size = sf::Vector2u(800, 600);
 
+	this->gState = GAME_STATE::PLAYING;
+
 }
 
 void Game::initWindow()
@@ -53,7 +55,7 @@ void Game::initView()
 
 void Game::initController()
 {
-	controller = new Controller(*this->player, this->level->getTiles(), this->bMenuActive);
+	controller = new Controller(*this->player, this->level->getTiles(), this->bMenuActive, this->gState);
 }
 
 //PrivateFunctions
@@ -169,7 +171,8 @@ void Game::pollEvents()
 			break;
 		case sf::Event::KeyPressed:
 			if (event.key.code == sf::Keyboard::Escape) {
-				this->menuPause();
+				//this->menuPause();
+				//this->gState = GAME_STATE::PAUSE; done in controller.cpp
 			}
 /*
 			switch (event.key.code)
@@ -217,21 +220,29 @@ void Game::render()
 		Renders game
 	*/
 	if (this->getFpsTime() > 100.f / this->MAX_FRAMERATE) {
-		//player->move_vel();
-		this->window->clear(sf::Color(0, 120, 80, 255)); //clear old frame with green (green background if nothing drawn)
-		//draw game
-		this->window->setView(this->view1);
-		this->view1.setCenter(this->player->getPos());
-		this->level->draw(*this->window);
-		this->renderPlayer(*this->window);
 
-		this->window->setView(this->minimap);
-		this->minimap.setCenter(this->player->getPos());
-		this->level->draw(*this->window);
-		this->renderPlayer(*this->window);
-		//this->renderMenu(*this->window);
-		//display game
-		this->window->display(); //render new frame
+		
+		//check game state
+		switch (this->gState)
+		{
+		case GAME_STATE::MAIN_MENU:
+			render_main();
+			break;
+		case GAME_STATE::PAUSE:
+			render_pause();
+			break;
+		case GAME_STATE::PLAYING:
+			render_game();
+			break;
+		case GAME_STATE::F1:
+			render_f1();
+			break;
+		default:
+			break;
+		}
+
+		
+		
 
 		this->updateFpsTime();
 	}
@@ -257,12 +268,121 @@ void Game::enter()
 	{
 	case 0: //RESUME
 		this->bMenuActive = false;
+		this->gState = GAME_STATE::PLAYING;
 		break;
 	case 1: //SETTINGS - not implemented yet
-		break;
-	case 2:
 		this->bMenuActive = false;
-		this->window->close();
+		this->gState = GAME_STATE::SETTINGS;
+		break;
+	case 2: //EXIT
+		this->bMenuActive = false;
+		this->gState = GAME_STATE::MAIN_MENU;
+		//this->window->close();
 		break;
 	}
+}
+
+void Game::render_main()
+{
+	this->mainMenu = new MainMenu(this->view1);
+	while (gState == GAME_STATE::MAIN_MENU) {
+		if (this->getFpsTime() > 100.f / this->MAX_FRAMERATE) {
+			this->window->clear(sf::Color::Green);
+
+			this->window->setView(view1);
+			this->mainMenu->draw(*this->window);
+			this->window->display();
+			this->updateFpsTime();
+		}
+		while (this->window->pollEvent(this->event)) {
+			switch (this->event.type) {
+			case sf::Event::Closed:
+				this->window->close();
+				break;
+			case sf::Event::KeyPressed:
+				if (this->event.key.code == sf::Keyboard::Enter) {
+					this->mainMenu->SelectorEnter();
+				}
+				if (this->event.key.code == sf::Keyboard::S || this->event.key.code == sf::Keyboard::Down) {
+					this->mainMenu->SelectorMove(SelDir::DOWN);
+				}
+				if (this->event.key.code == sf::Keyboard::W || this->event.key.code == sf::Keyboard::Up) {
+					this->mainMenu->SelectorMove(SelDir::UP);
+				}
+			}
+		}
+	}
+}
+
+void Game::render_pause()
+{
+	this->initMenu();
+	this->bMenuActive = true;
+	while (bMenuActive) {
+		if (this->getFpsTime() > 100.f / this->MAX_FRAMERATE) {
+			this->window->clear(sf::Color::Green); //clear old frame with green (green background if nothing drawn)
+
+			this->window->setView(this->view1);
+			//draw game
+			//this->renderAlf(*this->window);
+			//this->renderPlayer(*this->window);
+			this->renderMenu(*this->window);
+
+			//display game
+			this->window->display(); //render new frame
+
+			this->updateFpsTime();
+		}
+		while (this->window->pollEvent(this->event)) {
+			switch (this->event.type)
+			{
+			case sf::Event::Closed:
+				this->window->close();
+				break;
+			case sf::Event::KeyPressed:
+				/*               if(events.key.code == sf::Keyboard::Escape)
+									game.menu()*/
+
+				if (this->event.key.code == sf::Keyboard::Escape) {
+					this->gState = GAME_STATE::PLAYING;
+					break;
+				}
+				if (this->event.key.code == sf::Keyboard::S)
+					this->menu->setSelection(false);
+				if (this->event.key.code == sf::Keyboard::W)
+					this->menu->setSelection(true);
+				if (this->event.key.code == sf::Keyboard::Enter) {
+					this->enter();
+				}
+				break;
+			case sf::Event::Resized:
+				sf::FloatRect visibleArea(0.f, 0.f, event.size.width, event.size.height);
+				this->view1.reset(visibleArea);
+				break;
+			}
+		}
+	}
+	delete this->menu;
+}
+
+void Game::render_game()
+{
+	this->window->clear(sf::Color(0, 120, 80, 255)); //clear old frame with green (green background if nothing drawn)
+
+	this->window->setView(this->view1);
+	this->view1.setCenter(this->player->getPos());
+	this->level->draw(*this->window);
+	this->renderPlayer(*this->window);
+
+	this->window->setView(this->minimap);
+	this->minimap.setCenter(this->player->getPos());
+	this->level->draw(*this->window);
+	this->renderPlayer(*this->window);
+	//this->renderMenu(*this->window);
+	//display game
+	this->window->display(); //render new frame
+}
+
+void Game::render_f1()
+{
 }

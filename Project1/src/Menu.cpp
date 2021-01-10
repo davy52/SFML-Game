@@ -22,9 +22,9 @@ void Menu::initFont()
 void Menu::initVariables()
 {
 	this->selected = RESUME;
-	std::string arr[3] = { "Resume", "Settings", "Exit" };
+	std::string arr[3] = { "Resume", "Exit" };
 
-	menuText = new std::vector<sf::Text>(3);
+	menuText = new std::vector<sf::Text>(2);
 	int i = 0;
 	for (auto & text : *menuText) {
 		text.setFont(*this->font1);
@@ -143,7 +143,7 @@ void Menu::setSelection(bool up)
 			this->selected = RESUME;
 			break;
 		case EXIT:
-			this->selected = SETTINGS;
+			this->selected = RESUME;
 			break;
 		}
 	}
@@ -151,7 +151,7 @@ void Menu::setSelection(bool up)
 		switch (this->selected)
 		{
 		case RESUME:
-			this->selected = SETTINGS;
+			this->selected = EXIT;
 			break;
 		case SETTINGS:
 			this->selected = EXIT;
