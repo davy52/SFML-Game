@@ -11,7 +11,7 @@ void Game::initVariables()
 	this->videomode.height = 900;
 	this->window_size = sf::Vector2u(800, 600);
 
-	this->gState = GAME_STATE::PLAYING;
+	this->gState = GAME_STATE::MAIN_MENU;
 
 }
 
@@ -68,7 +68,7 @@ Game::Game()
 	this->initClock();
 	this->initLevel();
 	this->initPlayer();
-	this->initPlayer();
+	//this->initPlayer();
 	//this->initMenu();
 	this->initView();
 	this->initController();
@@ -237,6 +237,8 @@ void Game::render()
 		case GAME_STATE::F1:
 			render_f1();
 			break;
+		case GAME_STATE::EXIT:
+			this->window->close();
 		default:
 			break;
 		}
@@ -284,7 +286,7 @@ void Game::enter()
 
 void Game::render_main()
 {
-	this->mainMenu = new MainMenu(this->view1);
+	this->mainMenu = new MainMenu(this->view1, this->gState);
 	while (gState == GAME_STATE::MAIN_MENU) {
 		if (this->getFpsTime() > 100.f / this->MAX_FRAMERATE) {
 			this->window->clear(sf::Color::Green);

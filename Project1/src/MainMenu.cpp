@@ -1,8 +1,28 @@
 #include "MainMenu.h"
 
+//PRIVATE
+
+void MainMenu::initTexts()
+{
+
+	textMain.push_back(menuText(&MainMenu::text_level, "Levels", this->font, 30));
+	textMain.push_back(menuText(&MainMenu::text_char, "Change Name", this->font, 30));
+	textMain.push_back(menuText(&MainMenu::gameClose, "Exit", this->font, 30));
+
+	
+
+	textLevel.push_back(menuText(nullptr, "Level1", this->font, 30));
+	textLevel.push_back(menuText(nullptr, "Back", this->font, 30));
+	
+	textProfile.push_back(menuText(&MainMenu::text_main, "Back", this->font, 30));
+	
+
+	textActual = &textMain;
+}
+
 //CONSTRUCTOR
 
-MainMenu::MainMenu(sf::View& view, MenuState menuState): menuState(menuState)
+MainMenu::MainMenu(sf::View& view, GAME_STATE gState, MenuState menuState): menuState(menuState), view(view), gameState(gState)
 {
 	//font
 	if (!this->font.loadFromFile("Resources/Fonts/SyneMono-Regular.ttf")) {
@@ -13,21 +33,23 @@ MainMenu::MainMenu(sf::View& view, MenuState menuState): menuState(menuState)
 	this->body_size = sf::Vector2f(view.getSize().x, view.getSize().y);
 	this->body_size *= 8.f / 10.f;
 
-	this->body_pos = view.getCenter();
-	this->body_pos -= sf::Vector2f((view.getSize().x / 2.f) / 5.f, (view.getSize().y / 2.f) / 5.f);
+	//this->body_pos = view.getCenter();
+	this->body_pos = sf::Vector2f((view.getSize().x / 2.f) / 5.f, (view.getSize().y / 2.f) / 5.f);
 	 
 	body = new sf::RectangleShape(this->body_size);
 	body->setPosition(this->body_pos);
 	body->setFillColor(sf::Color(50, 120, 200, 200));
 
+	//Text innit
+	initTexts();
 	//selector position init
 	switch (this->menuState)
 	{
 	case MenuState::main:
-		this->SelectorPos = SelPos::level_select;
+		this->SelectorPos = textMain.begin();
 		break;
 	case MenuState::settings:
-			//this->SelectorPos =  opcji na razie nie ma
+		this->SelectorPos = textSettings.begin();
 			break;
 	default:
 		break;
@@ -37,78 +59,32 @@ MainMenu::MainMenu(sf::View& view, MenuState menuState): menuState(menuState)
 
 MainMenu::~MainMenu()
 {
+	delete body;
 }
 
 void MainMenu::draw(sf::RenderTarget& target)
 {
 	target.draw(*this->body);
-	for (sf::Text* line : this->text) {
-		target.draw(*line);
+	for (sf::Text line : *this->textActual) {
+		target.draw(line);
 	}
 }
 
 void MainMenu::SelectorMove(SelDir dir)
 {
-	switch (menuState)
+	switch (dir)
 	{
-	case MenuState::main:
-		switch (dir)
-		{
-		case SelDir::UP:
-			switch (SelectorPos)
-			{
-			case SelPos::level_select:
-				break;
-			case SelPos::character:
-				this->SelectorPos = SelPos::level_select;
-				break;
-			case SelPos::settings:
-				this->SelectorPos = ::SelPos::character;
-				break;
-			case SelPos::help:
-				this->SelectorPos = ::SelPos::settings;
-				break;
-			case SelPos::exit:
-				this->SelectorPos = ::SelPos::help;
-				break;
-			default:
-				break;
-			}
-			break;
-		case SelDir::DOWN:
-			switch (SelectorPos)
-			{
-			case SelPos::level_select:
-				this->SelectorPos = ::SelPos::character;
-				break;
-			case SelPos::character:
-				this->SelectorPos = ::SelPos::settings;
-				break;
-			case SelPos::settings:
-				this->SelectorPos = ::SelPos::help;
-				break;
-			case SelPos::help:
-				this->SelectorPos = ::SelPos::exit;
-				break;
-			case SelPos::exit:
-				break;
-			default:
-				break;
-			}
-			break;
-		default:
-			break;
+	case SelDir::UP:
+		if (SelectorPos != textActual->begin()) {
+			SelectorPos--;
+			textUpdate();
 		}
 		break;
-	case MenuState::level:	//choose level
-		break;
-	case MenuState::character:
-		break;
-	case MenuState::profile:
-		break;
-	case MenuState::skin:
-		break;
-	case MenuState::settings: 
+	case SelDir::DOWN:
+		if (SelectorPos != textActual->end()) {
+			SelectorPos++;
+			textUpdate();
+		}
 		break;
 	default:
 		break;
@@ -118,54 +94,82 @@ void MainMenu::SelectorMove(SelDir dir)
 
 void MainMenu::SelectorEnter()
 {
+	(this->*SelectorPos->func)(); //fucktion call from pointer
 }
 
 void MainMenu::textUpdate()
 {
-	for (auto* t : text) {
-		delete t;
+	for (auto line : *textActual) {
+		if (line == *SelectorPos) {
+			line.setStyle(sf::Text::Style::Underlined);
+		}
+		else {
+			line.setStyle(sf::Text::Style::Regular);
+		}
 	}
-	text.clear();
-	switch (menuState)
-	{
-	case MenuState::main:
-		break;
-	case MenuState::level:
-		this->text_level();
-		break;
-	case MenuState::character:
-		break;
-	case MenuState::profile:
-		break;
-	case MenuState::skin:
-		break;
-	case MenuState::settings:
-		break;
-	default:
-		break;
+
+	int i = 0;
+	sf::Vector2f bodyPos = body->getPosition();
+	float viewCenterX = view.getCenter().x;
+
+	for (menuText t : textMain) {
+		t.setFillColor(sf::Color::Black);
+		t.setOrigin(t.getLocalBounds().width / 2, t.getLocalBounds().height / 2);
+		t.setPosition(viewCenterX, bodyPos.y + 30 + 50 * i);
+		i++;
+	}
+	i = 0;
+	for (menuText t : textLevel) {
+		t.setFillColor(sf::Color::Black);
+		t.setOrigin(t.getLocalBounds().width / 2, t.getLocalBounds().height / 2);
+		t.setPosition(viewCenterX, bodyPos.y + 30 + 50 * i);
+		i++;
+	}
+	i = 0;
+	for (menuText t : textProfile) {
+		t.setFillColor(sf::Color::Black);
+		t.setOrigin(t.getLocalBounds().width / 2, t.getLocalBounds().height / 2);
+		t.setPosition(viewCenterX, bodyPos.y + 30 + 50 * i);
+		i++;
 	}
 }
 
+
+
+
 void MainMenu::text_main()
 {
+
 }
 
 void MainMenu::text_level()
 {
-	std::string arr[] = { "Level 1" };
+	//std::string arr[] = { "Level 1" };
 
-	for (int i = 0; i < 1; i++) { //od razu ddo wyboru wielu poziomow
-		sf::Text* temp = new sf::Text;
-		temp->setFont(this->font);
-		temp->setCharacterSize(30);
-	}
+	//for (int i = 0; i < 1; i++) { //od razu ddo wyboru wielu poziomow
+	//	sf::Text* temp = new sf::Text;
+	//	temp->setFont(this->font);
+	//	temp->setCharacterSize(30);
+	//}
+
+	textActual = &textLevel;
 }
 
 void MainMenu::text_char()
 {
+
 }
 
-void MainMenu::text_settings()
+void GameSave()
 {
+	return;
 }
+
+void MainMenu::gameClose()
+{
+	//GameSave();
+	gameState = GAME_STATE::EXIT;
+	
+}
+
 

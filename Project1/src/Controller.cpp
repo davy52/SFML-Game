@@ -80,7 +80,7 @@ void Controller::move_tWorker()
 			//odrzucenie tych plytek ktore na pewno nie beda kolidowaly z graczem
 			//zakladam ze predkosc gracza nigdy nie bedzie tak duza aby mogl "przeskoczyc" plytke
 			for (Tile tile : tiles) {
-				if ( sqrt(pow(tile.getPosition().x - bPos.x, 2) + pow(tile.getPosition().y - bPos.y, 2)) < tSize * 3) {	//jezeli plytka jest dalej od punktu odniesienia gracza niz 2 szerokosci plytek kolizja nie moze nastapic
+				if ( pow(tile.getPosition().x - bPos.x, 2) + pow(tile.getPosition().y - bPos.y, 2) < pow(tSize * 3, 2)) {	//jezeli plytka jest dalej od punktu odniesienia gracza niz 2 szerokosci plytek kolizja nie moze nastapic
 					CollTiles.push_back(tile);
 				}
 			}

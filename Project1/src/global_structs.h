@@ -6,5 +6,6 @@ enum class GAME_STATE
 	PLAYING,
 	PAUSE,
 	F1,
-	SETTINGS
+	SETTINGS,
+	EXIT
 };

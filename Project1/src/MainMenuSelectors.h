@@ -10,17 +10,17 @@ namespace Selector
 		settings,
 		help,
 		exit
-	} main;
+	};
 
 	enum class Level
 	{
 
-	} Level;
+	} ;
 
 	enum class Character
 	{
 
-	} Level;
+	};
 
 
 };
